@@ -7,3 +7,8 @@
 
 
 Rate limiter + PSR-15 middleware
+
+
+#### install
+
+`composer require alexpts/php-rate-limiter`

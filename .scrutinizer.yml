@@ -19,12 +19,18 @@ build:
   environment:
     postgresql: false
     redis: true
-    php: 7.1
+    php: 7.2
 
-    node:
-      my-node:
-        services:
-          redis: 4
+  nodes:
+    integration-tests:
+      dependencies:
+        before:
+          - pecl install igbinary
+          - pecl install redis <<< 'no\n'
+          - composer self-update
+          - composer install --ignore-platform-reqs
+      services:
+        redis: 4
 
   tests:
     override:
