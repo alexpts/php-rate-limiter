@@ -51,17 +51,16 @@ class MemoryAdapter implements StoreInterface
 
 	protected function isNeedCleanExpired(): bool
 	{
-		return ($this->lastClean + $this->cleanExpired) < time();
+		return ($this->lastClean + $this->cleanExpired) <= time();
 	}
 
 	protected function cleanExpired(): void
 	{
 		$current = time();
 
-		array_filter($this->ttlKeys, function(int $time, string $key) use ($current) {
+		$this->ttlKeys = array_filter($this->ttlKeys, function(int $time, string $key) use ($current) {
 			$isExpired = $time < $current;
-
-			if ($time < $current) {
+			if ($isExpired) {
 				unset($this->store[$key]);
 			}
 

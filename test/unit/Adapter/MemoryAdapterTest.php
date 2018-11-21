@@ -64,12 +64,10 @@ class MemoryAdapterTest extends TestCase
 
 	public function testCleanExpired(): void
 	{
-		$limiter = $this->limiter = new MemoryAdapter(1);
+		$limiter = $this->limiter = new MemoryAdapter(0);
 
-		$limiter->inc($this->testKey, 1);
-		$limiter->inc($this->testKey, 1);
-
-		sleep(2);
+		$limiter->inc($this->testKey, -1);
+		$limiter->inc($this->testKey, -1);
 
 		$value = $limiter->get($this->testKey);
 		static::assertSame(0, $value);
