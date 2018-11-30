@@ -10,6 +10,39 @@
 Rate limiter + PSR-15 middleware
 
 
-#### install
+#### Install
 
 `composer require alexpts/php-rate-limiter`
+
+
+#### Example
+
+```php
+<?php
+
+use PTS\NextRouter\Router;
+use PTS\RateLimiter\Adapter\MemoryAdapter;
+use PTS\RateLimiter\Limiter;
+use PTS\RateLimiter\RateLimitMiddleware;
+use Zend\Diactoros\Response\JsonResponse;
+use Zend\Diactoros\ServerRequestFactory;
+
+require_once '../vendor/autoload.php';
+
+$limitStore = new MemoryAdapter;
+$rateLimiter = new Limiter($limitStore);
+$response = new JsonResponse(['error' => 'Too Many Requests'], 429);
+
+$limiterMiddleware = new RateLimitMiddleware($rateLimiter, $response);
+$limiterMiddleware->setKeyAttr('ip');
+
+$psr15Runner = new Router(); // relay or other psr-15 runner
+$psr15Runner->getStore()->middleware($limiterMiddleware);
+
+$psr7Request = ServerRequestFactory::fromGlobals();
+$response = $psr15Runner->handle($psr7Request);
+
+// flush response or other
+// ...
+
+```
