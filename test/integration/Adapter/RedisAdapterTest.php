@@ -9,7 +9,7 @@ class RedisAdapterTest extends TestCase
     protected $limiter;
     protected $testKey = 'test_limiter';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -18,7 +18,7 @@ class RedisAdapterTest extends TestCase
         $this->limiter = new RedisAdapter($redis);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 

@@ -9,14 +9,14 @@ class MemoryAdapterTest extends TestCase
     protected $limiter;
     protected $testKey = 'test_limiter';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->limiter = new MemoryAdapter;
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
