@@ -36,8 +36,8 @@ $response = new JsonResponse(['error' => 'Too Many Requests'], 429);
 $limiterMiddleware = new RateLimitMiddleware($rateLimiter, $response);
 $limiterMiddleware->setKeyAttr('ip');
 
-$psr15Runner = new Router(); // relay or other psr-15 runner
-$psr15Runner->getStore()->middleware($limiterMiddleware);
+$psr15Runner = new Next(); // relay or other psr-15 runner
+$psr15Runner->getStoreLayers()->middleware($limiterMiddleware);
 
 $psr7Request = ServerRequestFactory::fromGlobals();
 $response = $psr15Runner->handle($psr7Request);
