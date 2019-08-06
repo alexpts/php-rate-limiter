@@ -36,7 +36,7 @@ class RedisAdapter implements StoreInterface
 
     public function reset(string $key): bool
     {
-        return (bool) $this->redis->delete($key);
+        return (bool) $this->redis->del($key);
     }
 
     public function isExceeded(string $key, int $max): bool

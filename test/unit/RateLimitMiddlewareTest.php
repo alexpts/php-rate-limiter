@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Server\MiddlewareInterface;
-use PTS\NextRouter\Router;
+use PTS\NextRouter\Next;
 use PTS\RateLimiter\Adapter\MemoryAdapter;
 use PTS\RateLimiter\Limiter;
 use PTS\RateLimiter\RateLimitMiddleware;
@@ -94,10 +94,10 @@ class RateLimitMiddlewareTest extends TestCase
         static::assertSame(20, $value);
     }
 
-    protected function getApp(MiddlewareInterface $md)
+    protected function getApp(MiddlewareInterface $md): Next
     {
-        $app = new Router;
-        $app->getStore()
+        $app = new Next;
+        $app->getStoreLayers()
             ->middleware($md)
             ->use(function ($request, $next) {
                 return new JsonResponse(['status' => 200]);
