@@ -8,6 +8,8 @@ services:
   - redis-server
 
 before_script:
+  - pecl uninstall redis
+  - pecl uninstall igbinary
   - pecl install igbinary
   - pecl install redis <<< 'no\n'
   - composer self-update
