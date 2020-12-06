@@ -1,8 +1,8 @@
 sudo: false
 language: php
 php:
-  - 7.2
-  - 7.3
+  - 8.0snapshot
+  - nightly
 
 services:
   - redis-server
@@ -16,4 +16,4 @@ before_script:
   - composer install --ignore-platform-reqs
 
 script:
-  - phpunit --configuration ./test/phpunit.xml
+  - ./vendor/bin/phpunit --configuration ./test/phpunit.xml
