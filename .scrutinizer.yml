@@ -19,7 +19,7 @@ build:
   environment:
     postgresql: false
     redis: true
-    php: 8.0
+    php: 8.0snapshot
 
   nodes:
     integration-tests:
