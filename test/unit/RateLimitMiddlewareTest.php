@@ -1,13 +1,15 @@
 <?php
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use PTS\NextRouter\Next;
+use PTS\Psr7\Factory\Psr17Factory;
+use PTS\Psr7\Response\JsonResponse;
 use PTS\RateLimiter\Adapter\MemoryAdapter;
 use PTS\RateLimiter\Limiter;
 use PTS\RateLimiter\RateLimitMiddleware;
-use Zend\Diactoros\Response\JsonResponse;
-use Zend\Diactoros\ServerRequestFactory;
 
 class RateLimitMiddlewareTest extends TestCase
 {
@@ -20,7 +22,8 @@ class RateLimitMiddlewareTest extends TestCase
         $md->setMax(2);
 
         $app = $this->getApp($md);
-        $request = ServerRequestFactory::fromGlobals();
+        $psr17 = new Psr17Factory;
+        $request = $psr17->createServerRequest('GET', '/');
         $request = $request->withAttribute('client-ip', '127.0.0.1');
 
         $response1 = $app->handle($request);
@@ -42,7 +45,8 @@ class RateLimitMiddlewareTest extends TestCase
         $md->setKeyAttr('pid');
 
         $app = $this->getApp($md);
-        $request = ServerRequestFactory::fromGlobals();
+        $psr17 = new Psr17Factory;
+        $request = $psr17->createServerRequest('GET', '/');
         $request = $request->withAttribute('pid', 'some');
 
         $app->handle($request);
@@ -63,7 +67,8 @@ class RateLimitMiddlewareTest extends TestCase
         $md->setKeyPrefix('api.rate');
 
         $app = $this->getApp($md);
-        $request = ServerRequestFactory::fromGlobals();
+        $psr17 = new Psr17Factory;
+        $request = $psr17->createServerRequest('GET', '/');
         $request = $request->withAttribute('pid', 'some');
 
         $app->handle($request);
@@ -84,7 +89,8 @@ class RateLimitMiddlewareTest extends TestCase
         $md->setTtl(20);
 
         $app = $this->getApp($md);
-        $request = ServerRequestFactory::fromGlobals();
+        $psr17 = new Psr17Factory;
+        $request = $psr17->createServerRequest('GET', '/');
         $request = $request->withAttribute('pid', 'some');
 
         $app->handle($request);
@@ -97,11 +103,9 @@ class RateLimitMiddlewareTest extends TestCase
     protected function getApp(MiddlewareInterface $md): Next
     {
         $app = new Next;
-        $app->getStoreLayers()
+        $app->getRouterStore()
             ->middleware($md)
-            ->use(function ($request, $next) {
-                return new JsonResponse(['status' => 200]);
-            });
+            ->use(fn(): ResponseInterface => new JsonResponse(['status' => 200]));
 
         return $app;
     }

@@ -7,11 +7,11 @@ use PTS\RateLimiter\StoreInterface;
 
 class MemoryAdapter implements StoreInterface
 {
-    protected $cleanExpired = 30;
-    protected $lastClean = 0;
+    protected int $cleanExpired = 30;
+    protected int $lastClean = 0;
 
-    protected $store = [];
-    protected $ttlKeys = [];
+    protected array $store = [];
+    protected array $ttlKeys = [];
 
     public function get(string $key): int
     {

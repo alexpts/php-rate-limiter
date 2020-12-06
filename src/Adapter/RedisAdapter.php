@@ -8,12 +8,9 @@ use Redis;
 
 class RedisAdapter implements StoreInterface
 {
-    /** @var Redis */
-    protected $redis;
+    protected Redis $redis;
 
-    /**
-     * @param Redis $redis - configured instance
-     */
+
     public function __construct(Redis $redis)
     {
         $this->redis = $redis;
@@ -21,7 +18,7 @@ class RedisAdapter implements StoreInterface
 
     public function get(string $key): int
     {
-        return (int) $this->redis->get($key);
+        return (int)$this->redis->get($key);
     }
 
     public function inc(string $key, int $ttl = 60): int
@@ -36,7 +33,7 @@ class RedisAdapter implements StoreInterface
 
     public function reset(string $key): bool
     {
-        return (bool) $this->redis->del($key);
+        return (bool)$this->redis->del($key);
     }
 
     public function isExceeded(string $key, int $max): bool

@@ -10,18 +10,12 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class RateLimitMiddleware implements MiddlewareInterface
 {
-    /** @var Limiter */
-    protected $limiter;
-    /** @var int */
-    protected $ttl = 60;
-    /** @var int */
-    protected $max = 60;
-    /** @var string */
-    protected $keyPrefix = 'limiter';
-    /** @var ResponseInterface */
-    protected $responseTooManyRequest = '';
-    /** @var string */
-    protected $keyAttr = 'client-ip';
+    protected Limiter $limiter;
+    protected int $ttl = 60; // sec
+    protected int $max = 60; // sec
+    protected string $keyPrefix = 'limiter';
+    protected ResponseInterface $responseTooManyRequest;
+    protected string $keyAttr = 'client-ip';
 
     public function __construct(Limiter $limiter, ResponseInterface $response)
     {
@@ -63,11 +57,6 @@ class RateLimitMiddleware implements MiddlewareInterface
         return $response;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     *
-     * @return string
-     */
     protected function getKey(ServerRequestInterface $request): string
     {
         $key = $request->getAttribute($this->keyAttr);

@@ -5,8 +5,7 @@ namespace PTS\RateLimiter;
 
 class Limiter
 {
-    /** @var StoreInterface */
-    protected $store;
+    protected StoreInterface $store;
 
     public function __construct(StoreInterface $store)
     {
